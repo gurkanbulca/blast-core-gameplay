@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee6f0f7f7095f934a897a68d049e8df1, type: 3}
+  m_Name: Block Green
+  m_EditorClassIdentifier: 
+  icons:
+  - {fileID: 21300000, guid: 2c1610ddd14e91140833abef8417c9f0, type: 3}
+  - {fileID: 21300000, guid: 664406f8257d68b4f9c23ce135468546, type: 3}
+  - {fileID: 21300000, guid: e1a974801b8a96942b15a5b05e7581bb, type: 3}
+  - {fileID: 21300000, guid: d32a3fe179e956b41b0c6bc4c65ac456, type: 3}

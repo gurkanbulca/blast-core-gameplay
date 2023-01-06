@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee6f0f7f7095f934a897a68d049e8df1, type: 3}
+  m_Name: Block Pink
+  m_EditorClassIdentifier: 
+  icons:
+  - {fileID: 21300000, guid: 18c99e85c923f5a4089d10d611bdf8c5, type: 3}
+  - {fileID: 21300000, guid: 2681d65c8d4ca3a49b3347b959187fae, type: 3}
+  - {fileID: 21300000, guid: ffe59defeee1c9c4ab4c4f5aed78f5e0, type: 3}
+  - {fileID: 21300000, guid: 4f0fdc9d861ed6a43bdb9f9581336a22, type: 3}
