@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef3e4be335e85604287281358c22ba82, type: 3}
   m_Name: Level 1
   m_EditorClassIdentifier: 
-  rowCount: 2
-  columnCount: 2
-  colorCount: 1
-  firstIconCondition: 4
-  secondIconCondition: 6
-  thirdIconCondition: 8
+  rowCount: 10
+  columnCount: 10
+  colorCount: 3
+  firstIconCondition: 2
+  secondIconCondition: 4
+  thirdIconCondition: 6

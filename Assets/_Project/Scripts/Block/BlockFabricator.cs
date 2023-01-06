@@ -49,13 +49,14 @@ public class BlockFabricator : ScriptableObject
         for (int i = 0; i < poolSize; i++)
         {
             var poolObject = Instantiate(blockPrefab, _poolParent);
+            poolObject.gameObject.SetActive(false);
             _poolItems.Enqueue(poolObject);
         }
     }
 
     public Block Get(int colorIndex)
     {
-        if (_poolItems.Count == 0)
+        if (_poolItems == null || _poolItems.Count == 0)
         {
             InitializePool(_poolSize);
         }

@@ -270,6 +270,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4312f61bbb1668743baed778f1790964, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  initialGameState: 0
+  exampleLevel: {fileID: 11400000, guid: 6c666330cc6ec474d8721a36afbf8fc2, type: 2}
+  blockFabricator: {fileID: 11400000, guid: a456005b88278f84d80930a1432eabde, type: 2}
+  gridOrigin: {x: 0, y: 4, z: 0}
 --- !u!4 &347532128
 Transform:
   m_ObjectHideFlags: 0
@@ -474,6 +478,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Block
       objectReference: {fileID: 0}
+    - target: {fileID: 4465742527469708833, guid: a396bd9b29efe2d44b84acdfa9f432d7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4465742527469708839, guid: a396bd9b29efe2d44b84acdfa9f432d7,
         type: 3}
       propertyPath: m_RootOrder
@@ -528,6 +537,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4944670577784513925, guid: a396bd9b29efe2d44b84acdfa9f432d7,
+        type: 3}
+      propertyPath: fallSpeed
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a396bd9b29efe2d44b84acdfa9f432d7, type: 3}

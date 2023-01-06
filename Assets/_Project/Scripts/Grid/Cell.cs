@@ -1,18 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Cell : MonoBehaviour
+public class Cell
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public readonly Vector3 position;
+    public readonly Vector2Int gridCoordinate;
+    public Block block;
 
-    // Update is called once per frame
-    void Update()
+    public Cell(Vector3 position, Vector2Int coordinate)
     {
-        
+        this.position = position;
+        gridCoordinate = coordinate;
     }
 }
