@@ -1,8 +1,10 @@
 using UnityEngine;
 
-public static class VectorExtensions
+namespace Extensions
 {
-    public static Vector2 WithX(this Vector2 v, float x)
+	public static class VectorExtensions
+	{
+		public static Vector2 WithX(this Vector2 v, float x)
 		{
 			v.x = x;
 			return v;
@@ -32,4 +34,5 @@ public static class VectorExtensions
 			v.z = z;
 			return v;
 		}
+	}
 }

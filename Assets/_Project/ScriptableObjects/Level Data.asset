@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef3e4be335e85604287281358c22ba82, type: 3}
-  m_Name: Level 1
+  m_Name: Level Data
   m_EditorClassIdentifier: 
-  rowCount: 10
-  columnCount: 10
-  colorCount: 3
-  firstIconCondition: 2
-  secondIconCondition: 4
-  thirdIconCondition: 6
+  rowCount: 4
+  columnCount: 4
+  colorCount: 6
+  firstIconCondition: 4
+  secondIconCondition: 6
+  thirdIconCondition: 8
