@@ -19,7 +19,6 @@ namespace GameCore
 
         #endregion
 
-
         #region Private Fields
 
         private InputController _inputController;
@@ -31,13 +30,12 @@ namespace GameCore
 
         #endregion
 
-
         #region Unity LifeCycle
 
         private void Awake()
         {
             _stateController = new GameStateController(initialGameState);
-            _inputController = new InputController(LayerMask.NameToLayer("Block"));
+            _inputController = new InputController();
             _inputController.OnRayCastHit += HandleRayCastHit;
         }
 
@@ -60,7 +58,6 @@ namespace GameCore
 
         #endregion
 
-
         #region Action Handlers
 
         private void HandleRayCastHit(List<Block> blockGroup)
@@ -71,7 +68,6 @@ namespace GameCore
         }
 
         #endregion
-
 
         #region LevelController
 
@@ -85,7 +81,6 @@ namespace GameCore
 
         #endregion
 
-
         #region Helper Methods
 
         private void CreateGrid()
@@ -96,7 +91,6 @@ namespace GameCore
         }
 
         #endregion
-
 
         #region Gizmos
 

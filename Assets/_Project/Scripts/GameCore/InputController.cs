@@ -7,18 +7,29 @@ namespace GameCore
 {
     public class InputController
     {
+        #region Actions
+
         public event Action<List<Block>> OnRayCastHit = delegate { };
+
+        #endregion
+
+        #region Private Fields
 
         private readonly RaycastHit2D[] _hits = new RaycastHit2D[1];
         private readonly Camera _camera;
-        private readonly LayerMask _blockLayer;
 
-        public InputController(LayerMask blockLayer)
+        #endregion
+
+        #region Constructor
+
+        public InputController()
         {
-            _blockLayer = blockLayer;
             _camera = Camera.main;
         }
 
+        #endregion
+
+        #region Public Methods
 
         public void Tick()
         {
@@ -27,6 +38,10 @@ namespace GameCore
                 RayCastForBlock();
             }
         }
+
+        #endregion
+
+        #region Helper Methods
 
         private void RayCastForBlock()
         {
@@ -39,5 +54,7 @@ namespace GameCore
                 return;
             OnRayCastHit(block.blockGroup);
         }
+
+        #endregion
     }
 }

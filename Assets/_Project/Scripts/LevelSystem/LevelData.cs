@@ -4,9 +4,10 @@ using UnityEngine;
 namespace LevelSystem
 {
     [CreateAssetMenu(menuName = "Level Data", fileName = "Level 1")]
-
     public class LevelData : ScriptableObject
     {
+        #region Public Fields
+
         [Range(2, 10)] public int rowCount = 2;
         [Range(2, 10)] public int columnCount = 2;
         [Range(1, 6)] public int colorCount = 1;
@@ -15,7 +16,13 @@ namespace LevelSystem
         [MinValue("greaterThanFirst")] public int secondIconCondition = 2;
         [MinValue("greaterThanSecond")] public int thirdIconCondition = 3;
 
+        #endregion
+
+        #region Properties
+
         private int greaterThanFirst => firstIconCondition + 1;
         private int greaterThanSecond => secondIconCondition + 1;
+
+        #endregion
     }
 }

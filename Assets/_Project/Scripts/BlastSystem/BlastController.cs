@@ -10,6 +10,8 @@ namespace BlastSystem
 {
     public class BlastController
     {
+        #region Private Fields
+
         private float[] _spawnHeights;
         private int _fallingBlockCount;
 
@@ -20,6 +22,9 @@ namespace BlastSystem
         private readonly float _spacing;
         private readonly Vector3 _gridOrigin;
 
+        #endregion
+
+        #region Constructor
 
         public BlastController(GameStateController stateController, GridController gridController, LevelData levelData,
             BlockFabricator blockFabricator, Vector3 gridOrigin, float spacing)
@@ -38,6 +43,8 @@ namespace BlastSystem
             Block.OnBlockFell += HandleBlockFell;
             GameStateController.OnCurrentGameStateChanged += HandleGameStateChange;
         }
+
+        #endregion
 
         #region Action Handlers
 
@@ -63,6 +70,7 @@ namespace BlastSystem
 
         #endregion
 
+        #region Destroy Block
 
         public void DestroyBlockGroup(List<Block> blockGroup)
         {
@@ -82,6 +90,10 @@ namespace BlastSystem
             SpawnMissingBlocks(columnIndices);
             _stateController.currentGameState = GameState.Falling;
         }
+
+        #endregion
+
+        #region Spawn Block
 
         private void SpawnMissingBlocks(List<int> columnIndices)
         {
@@ -116,6 +128,7 @@ namespace BlastSystem
             _stateController.currentGameState = GameState.Falling;
         }
 
+
         private void SpawnRandomBlock(LevelData levelData, int x, int y)
         {
             var cell = _gridController.grid[x, y];
@@ -129,6 +142,24 @@ namespace BlastSystem
             _fallingBlockCount++;
         }
 
+        #endregion
+
+        #region Shuffle
+
+        private void Shuffle()
+        {
+            foreach (var cell in _gridController.grid)
+            {
+                _blockFabricator.ReturnToPool(cell.Block);
+            }
+
+            SpawnBlocks(_levelData);
+        }
+
+        #endregion
+
+        #region Helper Methods
+
         private void ResetSpawnHeights()
         {
             for (var i = 0; i < _spawnHeights.Length; i++)
@@ -141,17 +172,6 @@ namespace BlastSystem
         {
             _spawnHeights = new float[columnCount];
             ResetSpawnHeights();
-        }
-
-
-        private void Shuffle()
-        {
-            foreach (var cell in _gridController.grid)
-            {
-                _blockFabricator.ReturnToPool(cell.Block);
-            }
-
-            SpawnBlocks(_levelData);
         }
 
         private void FindGroups()
@@ -186,6 +206,8 @@ namespace BlastSystem
 
             return groupLength > _levelData.firstIconCondition ? 1 : 0;
         }
+
+        #endregion
 
         #region Dropping
 
@@ -226,7 +248,6 @@ namespace BlastSystem
 
         #endregion
 
-
         #region Block Grouping
 
         private List<Block> FindGroupForBlock(Block block)
@@ -248,11 +269,9 @@ namespace BlastSystem
             CheckDown(ref group, block);
         }
 
-        private void CheckDown(ref List<Block> group, Block block)
+        private void CheckNeighbor(ref List<Block> group, Block block, int x, int y)
         {
-            if (block.gridPosition.y + 1 == _levelData.rowCount)
-                return;
-            var neighbor = _gridController.GetCell(block.gridPosition.x, block.gridPosition.y + 1).Block;
+            var neighbor = _gridController.GetCell(x, y).Block;
             if (neighbor.blockGroup != null)
                 return;
             if (neighbor.blockData == block.blockData)
@@ -261,51 +280,34 @@ namespace BlastSystem
                 neighbor.blockGroup = group;
                 CheckNeighborsForGroup(ref group, neighbor);
             }
+        }
+
+        private void CheckDown(ref List<Block> group, Block block)
+        {
+            if (block.gridPosition.y + 1 == _levelData.rowCount)
+                return;
+            CheckNeighbor(ref group, block, block.gridPosition.x, block.gridPosition.y + 1);
         }
 
         private void CheckUp(ref List<Block> group, Block block)
         {
             if (block.gridPosition.y - 1 < 0)
                 return;
-            var neighbor = _gridController.GetCell(block.gridPosition.x, block.gridPosition.y - 1).Block;
-            if (neighbor.blockGroup != null)
-                return;
-            if (neighbor.blockData == block.blockData)
-            {
-                group.Add(neighbor);
-                neighbor.blockGroup = group;
-                CheckNeighborsForGroup(ref group, neighbor);
-            }
+            CheckNeighbor(ref group, block, block.gridPosition.x, block.gridPosition.y - 1);
         }
 
         private void CheckLeft(ref List<Block> group, Block block)
         {
             if (block.gridPosition.x - 1 < 0)
                 return;
-            var neighbor = _gridController.GetCell(block.gridPosition.x - 1, block.gridPosition.y).Block;
-            if (neighbor.blockGroup != null)
-                return;
-            if (neighbor.blockData == block.blockData)
-            {
-                group.Add(neighbor);
-                neighbor.blockGroup = group;
-                CheckNeighborsForGroup(ref group, neighbor);
-            }
+            CheckNeighbor(ref group, block, block.gridPosition.x - 1, block.gridPosition.y);
         }
 
         private void CheckRight(ref List<Block> group, Block block)
         {
             if (block.gridPosition.x + 1 == _levelData.columnCount)
                 return;
-            var neighbor = _gridController.GetCell(block.gridPosition.x + 1, block.gridPosition.y).Block;
-            if (neighbor.blockGroup != null)
-                return;
-            if (neighbor.blockData == block.blockData)
-            {
-                group.Add(neighbor);
-                neighbor.blockGroup = group;
-                CheckNeighborsForGroup(ref group, neighbor);
-            }
+            CheckNeighbor(ref group, block, block.gridPosition.x + 1, block.gridPosition.y);
         }
 
         #endregion
