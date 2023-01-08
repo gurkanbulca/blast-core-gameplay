@@ -43,19 +43,11 @@ namespace BlastSystem
             SpawnBlocks(levelData);
 
             Block.OnBlockFell += HandleBlockFell;
-            GameStateController.OnCurrentGameStateChanged += HandleGameStateChange;
         }
 
         #endregion
 
         #region Action Handlers
-
-        private void HandleGameStateChange(GameState state)
-        {
-            if (state == GameState.Falling)
-                ResetSpawnHeights();
-        }
-
 
         private void HandleBlockFell()
         {
@@ -90,6 +82,7 @@ namespace BlastSystem
 
             DropBlocks(destroyedColumns);
             SpawnMissingBlocks(columnIndices);
+            ResetSpawnHeights();
             _stateController.currentGameState = GameState.Falling;
         }
 
@@ -127,6 +120,7 @@ namespace BlastSystem
                 }
             }
 
+            ResetSpawnHeights();
             _stateController.currentGameState = GameState.Falling;
         }
 
