@@ -4,9 +4,6 @@ using NUnit.Framework;
 using UnityEngine;
 using Extensions;
 
-namespace _Project.Tests.EditMode.GridSystem
-{
-}
 
 namespace _Project.Tests.EditMode.GridSystem
 {

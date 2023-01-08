@@ -31,6 +31,9 @@ namespace GameCore
 
         #region Public Methods
 
+        /// <summary>
+        /// Checks mouse input for every tick.
+        /// </summary>
         public void Tick()
         {
             if (Input.GetMouseButtonDown(0))
@@ -43,6 +46,9 @@ namespace GameCore
 
         #region Helper Methods
 
+        /// <summary>
+        /// Casts non allocated ray to mouse position for block.
+        /// </summary>
         private void RayCastForBlock()
         {
             var ray = _camera.ScreenPointToRay(Input.mousePosition);

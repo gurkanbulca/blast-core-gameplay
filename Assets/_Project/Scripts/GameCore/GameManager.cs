@@ -34,6 +34,7 @@ namespace GameCore
 
         private void Awake()
         {
+            Application.targetFrameRate = 60;
             _stateController = new GameStateController(initialGameState);
             _inputController = new InputController();
             _inputController.OnRayCastHit += HandleRayCastHit;
@@ -60,6 +61,10 @@ namespace GameCore
 
         #region Action Handlers
 
+        /// <summary>
+        /// Event listener for InPutController's OnRayCast Action. If block group size equal or greater than two triggers block destroying sequence.
+        /// </summary>
+        /// <param name="blockGroup"></param>
         private void HandleRayCastHit(List<Block> blockGroup)
         {
             if (blockGroup.Count < 2)
@@ -71,6 +76,10 @@ namespace GameCore
 
         #region LevelController
 
+        /// <summary>
+        /// Loads level from LevelData.
+        /// </summary>
+        /// <param name="levelData"></param>
         private void LoadLevel(LevelData levelData)
         {
             CreateGrid();
@@ -83,6 +92,9 @@ namespace GameCore
 
         #region Helper Methods
 
+        /// <summary>
+        /// Creates instance of GridController.
+        /// </summary>
         private void CreateGrid()
         {
             _gridController = new GridController(new GridData(
@@ -94,6 +106,9 @@ namespace GameCore
 
         #region Gizmos
 
+        /// <summary>
+        /// Gizmos for grid.
+        /// </summary>
         private void OnDrawGizmos()
         {
             if (!exampleLevel)

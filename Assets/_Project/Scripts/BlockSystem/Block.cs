@@ -67,6 +67,10 @@ namespace BlockSystem
 
         #region Action Handlers
 
+        /// <summary>
+        /// On beginning of the falling state, method sets sorting for current grid position and also trigger fall animation if fall height has been set.
+        /// </summary>
+        /// <param name="state"></param>
         private void HandleGameStateChange(GameState state)
         {
             if (state != GameState.Falling)
@@ -80,6 +84,11 @@ namespace BlockSystem
 
         #region Public Methods
 
+        /// <summary>
+        /// Initialize block type by block data.
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="rowCount"></param>
         public void Initialize(BlockData data, int rowCount)
         {
             blockData = data;
@@ -87,17 +96,28 @@ namespace BlockSystem
             _rowCount = rowCount;
         }
 
-
+        /// <summary>
+        /// Sets grid position.
+        /// </summary>
+        /// <param name="position"></param>
         public void SetGridPosition(Vector2Int position)
         {
             gridPosition = position;
         }
 
+        /// <summary>
+        /// Set SpriteRenderer sprite from BlockData icons by sprite index.
+        /// </summary>
+        /// <param name="index"></param>
         public void SetIcon(int index)
         {
             _renderer.sprite = blockData.icons[index];
         }
 
+        /// <summary>
+        /// Sets fall height.
+        /// </summary>
+        /// <param name="height"></param>
         public void FallTo(float height)
         {
             _fallHeight = height;
@@ -107,6 +127,9 @@ namespace BlockSystem
 
         #region Helper Methods
 
+        /// <summary>
+        /// Trigger fall animation if fall height has been set.
+        /// </summary>
         private void Fall()
         {
             if (float.IsPositiveInfinity(_fallHeight))
@@ -120,6 +143,10 @@ namespace BlockSystem
                 });
         }
 
+        /// <summary>
+        /// Set sorting order of SpriteRenderer.
+        /// </summary>
+        /// <param name="sortingOrder"></param>
         private void SetSortingOrder(int sortingOrder)
         {
             _renderer.sortingOrder = sortingOrder;

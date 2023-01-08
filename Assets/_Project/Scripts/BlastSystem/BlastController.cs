@@ -40,7 +40,7 @@ namespace BlastSystem
 
             _blockFabricator.InitializePool(_levelData.columnCount * _levelData.rowCount);
             InitializeSpawnHeights(levelData.columnCount);
-            SpawnBlocks(levelData);
+            SpawnBlocks(levelData.colorCount);
 
             Block.OnBlockFell += HandleBlockFell;
         }
@@ -49,6 +49,9 @@ namespace BlastSystem
 
         #region Action Handlers
 
+        /// <summary>
+        /// Detect completing of falling status of blocks and swap game state to idle state from falling state. Then find block groups.
+        /// </summary>
         private void HandleBlockFell()
         {
             if (_stateController.currentGameState != GameState.Falling)
@@ -66,6 +69,10 @@ namespace BlastSystem
 
         #region Destroy Block
 
+        /// <summary>
+        /// Handles block group destroying.
+        /// </summary>
+        /// <param name="blockGroup">Group of blocks are going to be exploded.</param>
         public void DestroyBlockGroup(List<Block> blockGroup)
         {
             _stateController.currentGameState = GameState.Blasting;
@@ -90,6 +97,10 @@ namespace BlastSystem
 
         #region Spawn Block
 
+        /// <summary>
+        /// After reposition of remaining blocks, spawn random type of block for every empty cell.
+        /// </summary>
+        /// <param name="columnIndices"></param>
         private void SpawnMissingBlocks(List<int> columnIndices)
         {
             _stateController.currentGameState = GameState.Spawning;
@@ -105,18 +116,22 @@ namespace BlastSystem
                 }
 
                 if (targetCell != null)
-                    SpawnRandomBlock(_levelData, targetCell.GridCoordinate.x, targetCell.GridCoordinate.y);
+                    SpawnRandomBlock(_levelData.columnCount, targetCell.GridCoordinate.x, targetCell.GridCoordinate.y);
             }
         }
 
-        private void SpawnBlocks(LevelData levelData)
+        /// <summary>
+        /// Spawn random type of blocks for completely empty grid.
+        /// </summary>
+        /// <param name="colorCount"></param>
+        private void SpawnBlocks(int colorCount)
         {
             _stateController.currentGameState = GameState.Spawning;
             for (var y = _gridController.grid.GetLength(1) - 1; y >= 0; y--)
             {
                 for (var x = 0; x < _gridController.grid.GetLength(0); x++)
                 {
-                    SpawnRandomBlock(levelData, x, y);
+                    SpawnRandomBlock(colorCount, x, y);
                 }
             }
 
@@ -124,11 +139,16 @@ namespace BlastSystem
             _stateController.currentGameState = GameState.Falling;
         }
 
-
-        private void SpawnRandomBlock(LevelData levelData, int x, int y)
+        /// <summary>
+        /// Spawn random type of block for given grid coordinate.
+        /// </summary>
+        /// <param name="colorCount">Generate random color index by color count.</param>
+        /// <param name="x">x-coordinate of block.</param>
+        /// <param name="y">y-coordinate of block.</param>
+        private void SpawnRandomBlock(int colorCount, int x, int y)
         {
             var cell = _gridController.grid[x, y];
-            var block = _blockFabricator.Get(Random.Range(0, levelData.colorCount), _levelData.rowCount);
+            var block = _blockFabricator.Get(Random.Range(0, colorCount), _levelData.rowCount);
             block.transform.position = cell.Position.WithY(_spawnHeights[x]);
             _spawnHeights[x] += _spacing;
             block.SetGridPosition(new Vector2Int(x, y));
@@ -141,6 +161,9 @@ namespace BlastSystem
 
         #region Shuffle
 
+        /// <summary>
+        /// For deadlock case shuffles blocks.
+        /// </summary>
         private void Shuffle()
         {
             foreach (var cell in _gridController.grid)
@@ -148,13 +171,16 @@ namespace BlastSystem
                 _blockFabricator.ReturnToPool(cell.Block);
             }
 
-            SpawnBlocks(_levelData);
+            SpawnBlocks(_levelData.colorCount);
         }
 
         #endregion
 
         #region Helper Methods
 
+        /// <summary>
+        /// After spawning state completed reset spawn heights for every column.
+        /// </summary>
         private void ResetSpawnHeights()
         {
             for (var i = 0; i < _spawnHeights.Length; i++)
@@ -163,12 +189,19 @@ namespace BlastSystem
             }
         }
 
+        /// <summary>
+        /// Generates _spawnHeights array.
+        /// </summary>
+        /// <param name="columnCount"></param>
         private void InitializeSpawnHeights(int columnCount)
         {
             _spawnHeights = new float[columnCount];
             ResetSpawnHeights();
         }
 
+        /// <summary>
+        /// Search grid for for block groups.
+        /// </summary>
         private void FindGroups()
         {
             var highestGroupLength = 0;
@@ -187,6 +220,11 @@ namespace BlastSystem
             }
         }
 
+        /// <summary>
+        /// Helper method for getting icon index by group length.
+        /// </summary>
+        /// <param name="groupLength"></param>
+        /// <returns></returns>
         private int GetIconIndex(int groupLength)
         {
             if (groupLength > _levelData.thirdIconCondition)
@@ -206,6 +244,11 @@ namespace BlastSystem
 
         #region Dropping
 
+        /// <summary>
+        /// After blasting state drops remaining blocks for matching column index of destroyed blocks.
+        /// Every column can be calculated independently. For that, multi thread algorithm implemented here.
+        /// </summary>
+        /// <param name="destroyedColumns"></param>
         private void DropBlocks(HashSet<int> destroyedColumns)
         {
             var threads = new List<Thread>();
@@ -222,6 +265,10 @@ namespace BlastSystem
             }
         }
 
+        /// <summary>
+        /// Iterates cells of column in reverse order and drops blocks to lowest empty cell of below them.
+        /// </summary>
+        /// <param name="cells"></param>
         private void DropColumn(IReadOnlyList<Cell> cells)
         {
             for (var i = cells.Count - 2; i >= 0; i--)
@@ -252,17 +299,26 @@ namespace BlastSystem
 
         #region Block Grouping
 
+        /// <summary>
+        /// Checks neighbors for grouping.
+        /// </summary>
+        /// <param name="block">target block for algorithm.</param>
+        /// <returns>Returns group.</returns>
         private List<Block> FindGroupForBlock(Block block)
         {
             if (block.blockGroup != null)
                 return block.blockGroup;
-            var group = new List<Block>();
-            group.Add(block);
+            var group = new List<Block> {block};
             block.blockGroup = group;
             CheckNeighborsForGroup(ref group, block);
             return group;
         }
 
+        /// <summary>
+        /// Check four side of target block grouping. Method going to be called recursively.
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="block"></param>
         private void CheckNeighborsForGroup(ref List<Block> group, Block block)
         {
             CheckRight(ref group, block);
@@ -271,6 +327,13 @@ namespace BlastSystem
             CheckDown(ref group, block);
         }
 
+        /// <summary>
+        /// Check block in the cell of given coordinate for grouping.
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="block"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         private void CheckNeighbor(ref List<Block> group, Block block, int x, int y)
         {
             var neighbor = _gridController.GetCell(x, y).Block;
@@ -284,6 +347,11 @@ namespace BlastSystem
             }
         }
 
+        /// <summary>
+        /// Checks the neighbor below. 
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="block"></param>
         private void CheckDown(ref List<Block> group, Block block)
         {
             if (block.gridPosition.y + 1 == _levelData.rowCount)
@@ -291,6 +359,11 @@ namespace BlastSystem
             CheckNeighbor(ref group, block, block.gridPosition.x, block.gridPosition.y + 1);
         }
 
+        /// <summary>
+        /// Checks the neighbor above.
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="block"></param>
         private void CheckUp(ref List<Block> group, Block block)
         {
             if (block.gridPosition.y - 1 < 0)
@@ -298,6 +371,11 @@ namespace BlastSystem
             CheckNeighbor(ref group, block, block.gridPosition.x, block.gridPosition.y - 1);
         }
 
+        /// <summary>
+        /// Checks the neighbor left.
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="block"></param>
         private void CheckLeft(ref List<Block> group, Block block)
         {
             if (block.gridPosition.x - 1 < 0)
@@ -305,6 +383,11 @@ namespace BlastSystem
             CheckNeighbor(ref group, block, block.gridPosition.x - 1, block.gridPosition.y);
         }
 
+        /// <summary>
+        /// Checks the neighbor right.
+        /// </summary>
+        /// <param name="group"></param>
+        /// <param name="block"></param>
         private void CheckRight(ref List<Block> group, Block block)
         {
             if (block.gridPosition.x + 1 == _levelData.columnCount)

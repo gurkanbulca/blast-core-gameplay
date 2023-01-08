@@ -20,7 +20,14 @@ namespace LevelSystem
 
         #region Properties
 
+        /// <summary>
+        /// Required for secondIconCondition value restricts.
+        /// </summary>
         private int greaterThanFirst => firstIconCondition + 1;
+        
+        /// <summary>
+        /// Required for thirdIconCondition value restricts.
+        /// </summary>
         private int greaterThanSecond => secondIconCondition + 1;
 
         #endregion

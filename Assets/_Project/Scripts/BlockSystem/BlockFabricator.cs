@@ -23,6 +23,10 @@ namespace BlockSystem
 
         #region Public Methods
 
+        /// <summary>
+        /// Returns block to pool.
+        /// </summary>
+        /// <param name="block"></param>
         public void ReturnToPool(Block block)
         {
             if (_poolItems.Count >= _poolSize)
@@ -35,7 +39,10 @@ namespace BlockSystem
             block.gameObject.SetActive(false);
         }
 
-
+        /// <summary>
+        /// Initialize block pool by pool size.
+        /// </summary>
+        /// <param name="poolSize"></param>
         public void InitializePool(int poolSize)
         {
             _poolSize = poolSize;
@@ -51,7 +58,12 @@ namespace BlockSystem
             GrowPool(_poolSize);
         }
 
-
+        /// <summary>
+        /// Get available block from pool. If pool is empty, grows pool.
+        /// </summary>
+        /// <param name="colorIndex"></param>
+        /// <param name="rowCount"></param>
+        /// <returns></returns>
         public Block Get(int colorIndex, int rowCount)
         {
             if (_poolItems == null)
@@ -70,6 +82,10 @@ namespace BlockSystem
 
         #region Helper Methods
 
+        /// <summary>
+        /// Grows pool by pool size.
+        /// </summary>
+        /// <param name="poolSize"></param>
         private void GrowPool(int poolSize)
         {
             for (int i = 0; i < poolSize; i++)

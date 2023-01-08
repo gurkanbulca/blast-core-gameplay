@@ -29,6 +29,9 @@ namespace GridSystem
 
         #region Public Methods
 
+        /// <summary>
+        /// Generates grid by grid data.
+        /// </summary>
         public void GenerateGrid()
         {
             grid = new Cell[_gridData.Size.x, _gridData.Size.y];
@@ -42,7 +45,16 @@ namespace GridSystem
                 }
             }
         }
-
+        
+        /// <summary>
+        /// Calculates cell position for specific coordinate.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="columnCount"></param>
+        /// <param name="origin"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
         public Vector3 CalculateCellPosition(int x, int y, int columnCount, Vector3 origin)
         {
             if (x < 0 || y < 0 || columnCount < 0)
@@ -53,6 +65,11 @@ namespace GridSystem
                 origin.y - _gridData.Spacing * y, origin.z);
         }
 
+        /// <summary>
+        /// Gives specific column of the grid by column index.
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public Cell[] GetColumn(int index)
         {
             return Enumerable.Range(0, grid.GetLength(1))
@@ -60,6 +77,12 @@ namespace GridSystem
                 .ToArray();
         }
 
+        /// <summary>
+        /// Gives specific cell of the grid by coordinate.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
         public Cell GetCell(int x, int y)
         {
             return grid[x, y];
