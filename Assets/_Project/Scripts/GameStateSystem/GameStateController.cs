@@ -11,15 +11,6 @@ namespace GameStateSystem
 
         #endregion
 
-        #region Constructor
-
-        public GameStateController(GameState initialState)
-        {
-            currentGameState = initialState;
-        }
-
-        #endregion
-
         #region Private Fields
 
         private GameState _currentGameState;
@@ -43,6 +34,15 @@ namespace GameStateSystem
                 Debug.Log($"Current game state changed to: {value.ToString()}");
                 OnCurrentGameStateChanged(value);
             }
+        }
+
+        #endregion
+
+        #region Constructor
+
+        public GameStateController(GameState initialState)
+        {
+            currentGameState = initialState;
         }
 
         #endregion
