@@ -17,7 +17,7 @@ namespace GridSystem
 
         public Cell(Vector3 position, Vector2Int coordinate)
         {
-            this.Position = position;
+            Position = position;
             GridCoordinate = coordinate;
         }
 

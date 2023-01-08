@@ -4,7 +4,6 @@ using UnityEngine;
 namespace BlockSystem
 {
     [CreateAssetMenu(menuName = "Block Fabricator", fileName = "Block Fabricator")]
-
     public class BlockFabricator : ScriptableObject
     {
         #region Serialized Fields
@@ -53,7 +52,7 @@ namespace BlockSystem
         }
 
 
-        public Block Get(int colorIndex)
+        public Block Get(int colorIndex, int rowCount)
         {
             if (_poolItems == null)
                 InitializePool(_poolSize);
@@ -63,7 +62,7 @@ namespace BlockSystem
 
             var block = _poolItems.Dequeue();
             block.gameObject.SetActive(true);
-            block.Initialize(blockTypes[colorIndex]);
+            block.Initialize(blockTypes[colorIndex], rowCount);
             return block;
         }
 

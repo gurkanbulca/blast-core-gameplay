@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -44,22 +45,18 @@ namespace GridSystem
 
         public Vector3 CalculateCellPosition(int x, int y, int columnCount, Vector3 origin)
         {
+            if (x < 0 || y < 0 || columnCount < 0)
+                throw new ArgumentOutOfRangeException(nameof(x), "Value can not be negative!");
+
             return new Vector3(
                 (origin.x - _gridData.Spacing * columnCount / 2f + _gridData.Spacing / 2f) + _gridData.Spacing * x,
-                origin.y - _gridData.Spacing * y);
+                origin.y - _gridData.Spacing * y, origin.z);
         }
 
         public Cell[] GetColumn(int index)
         {
             return Enumerable.Range(0, grid.GetLength(1))
                 .Select(x => grid[index, x])
-                .ToArray();
-        }
-
-        public Cell[] GetRow(int index)
-        {
-            return Enumerable.Range(0, grid.GetLength(0))
-                .Select(x => grid[x, index])
                 .ToArray();
         }
 

@@ -33,6 +33,7 @@ namespace BlockSystem
         private SpriteRenderer _renderer;
         private Transform _transform;
         private float _fallHeight = Mathf.Infinity;
+        private int _rowCount;
 
         #endregion
 
@@ -59,6 +60,7 @@ namespace BlockSystem
         private void OnDisable()
         {
             GameStateController.OnCurrentGameStateChanged -= HandleGameStateChange;
+            _fallHeight = Mathf.Infinity;
         }
 
         #endregion
@@ -69,6 +71,7 @@ namespace BlockSystem
         {
             if (state != GameState.Falling)
                 return;
+            SetSortingOrder(_rowCount - gridPosition.y);
             Fall();
             blockGroup = null;
         }
@@ -77,21 +80,17 @@ namespace BlockSystem
 
         #region Public Methods
 
-        public void Initialize(BlockData data)
+        public void Initialize(BlockData data, int rowCount)
         {
             blockData = data;
             SetIcon(0);
+            _rowCount = rowCount;
         }
 
 
         public void SetGridPosition(Vector2Int position)
         {
             gridPosition = position;
-        }
-
-        public void SetSortingOrder(int sortingOrder)
-        {
-            _renderer.sortingOrder = sortingOrder;
         }
 
         public void SetIcon(int index)
@@ -119,6 +118,11 @@ namespace BlockSystem
                     _fallHeight = Mathf.Infinity;
                     OnBlockFell();
                 });
+        }
+
+        private void SetSortingOrder(int sortingOrder)
+        {
+            _renderer.sortingOrder = sortingOrder;
         }
 
         #endregion

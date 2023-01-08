@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using BlockSystem;
 using Extensions;
 using GameStateSystem;
 using UnityEngine;
 using GridSystem;
 using LevelSystem;
+
 
 namespace BlastSystem
 {
@@ -132,10 +134,9 @@ namespace BlastSystem
         private void SpawnRandomBlock(LevelData levelData, int x, int y)
         {
             var cell = _gridController.grid[x, y];
-            var block = _blockFabricator.Get(Random.Range(0, levelData.colorCount));
+            var block = _blockFabricator.Get(Random.Range(0, levelData.colorCount), _levelData.rowCount);
             block.transform.position = cell.Position.WithY(_spawnHeights[x]);
             _spawnHeights[x] += _spacing;
-            block.SetSortingOrder(levelData.columnCount - cell.GridCoordinate.y);
             block.SetGridPosition(new Vector2Int(x, y));
             cell.Block = block;
             block.FallTo(cell.Position.y);
@@ -213,9 +214,17 @@ namespace BlastSystem
 
         private void DropBlocks(HashSet<int> destroyedColumns)
         {
+            var threads = new List<Thread>();
             foreach (var columnIndex in destroyedColumns)
             {
-                DropColumn(_gridController.GetColumn(columnIndex));
+                var thread = new Thread(() => DropColumn(_gridController.GetColumn(columnIndex)));
+                thread.Start();
+                threads.Add(thread);
+            }
+
+            foreach (var thread in threads)
+            {
+                thread.Join();
             }
         }
 
@@ -241,7 +250,6 @@ namespace BlastSystem
                 cell.Block = null;
                 targetCell.Block.FallTo(targetCell.Position.y);
                 targetCell.Block.SetGridPosition(targetCell.GridCoordinate);
-                targetCell.Block.SetSortingOrder(_levelData.columnCount - targetCell.GridCoordinate.y);
                 _fallingBlockCount++;
             }
         }
